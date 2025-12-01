@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Homework Details{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Homework Details</h1>
+    <a href="{% url 'homeworks' %}" class="btn btn-outline-secondary">← Back</a>
+</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Course</dt>
+            <dd class="col-sm-9">{{ homework.course.title }}</dd>
+
+            <dt class="col-sm-3">Teacher</dt>
+            <dd class="col-sm-9">{{ homework.course.teacher.name }}</dd>
+
+            <dt class="col-sm-3">Title</dt>
+            <dd class="col-sm-9">{{ homework.title }}</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">{{ homework.description }}</dd>
+
+            <dt class="col-sm-3">Deadline</dt>
+            <dd class="col-sm-9">{{ homework.submission_date|date:"Y-m-d H:i" }}</dd>
+
+        </dl>
+    </div>
+</div>
+{% endblock %}

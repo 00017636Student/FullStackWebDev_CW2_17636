@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card mb-4">
+        <div class='card-body'>
+            <h3>Welcome, <strong>{{user.username}} </strong> </h3>
+            <span class='badge bg-info'> {{user.groups.all.0.name}} </span>
+        </div>
+    </div>
+    <div class="row g-4">
+        {% if user.is_superuser %}
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h5>Students</h5>
+                <p class="display-6">{{ students_count }}</p>
+                <a href="{% url 'students' %}" class="btn btn-outline-primary w-100">Manage Students</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h5>Teachers</h5>
+                <p class="display-6">{{ teachers_count }}</p>
+                <a href="{% url 'teachers' %}" class="btn btn-outline-primary w-100">Manage Teachers</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h5>Courses</h5>
+                <p class="display-6">{{ courses_count }}</p>
+                <a href="{% url 'courses' %}" class="btn btn-outline-primary w-100">Manage Courses</a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm">
+                <h5>Enrollments</h5>
+                <p class="display-6">{{ enrollments_count }}</p>
+                <a href="{% url 'enrollments' %}" class="btn btn-outline-primary w-100">Manage Enrollments</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.student_profile %}
+        {% for course in student_courses %}
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>{{ course.title }}</h5>
+                <p class="mb-2">{{ course.description }}</p>
+                <a href="{% url 'homeworks' %}" class="btn btn-primary w-100">View Homeworks</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">You are not enrolled in any courses yet.</p>
+        {% endfor %}
+        {% endif %}
+
+        {% if user.teacher_profile %}
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>My Courses</h5>
+                <p>{{ teacher_courses|length }} courses</p>
+                <p class="text-muted">Total students: {{ enrolled_students_count }}</p>
+                <a href="{% url 'courses' %}" class="btn btn-primary w-100">View Courses</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Homeworks</h5>
+                <p>{{ homeworks_count }} created</p>
+                <a href="{% url 'homeworks' %}" class="btn btn-info w-100">Manage Homeworks</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 text-center">
+                <h5>Submitted Homeworks</h5>
+                <p>{{ submissions_to_grade|length }} pending</p>
+                <a href="{% url 'submitted_homeworks' %}" class="btn btn-success w-100">View Submissions</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Homeworks{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold">📝 Homeworks</h1>
+        {% if request.user.teacher_profile or request.user.is_superuser %}
+            <a href="{% url 'create_homework' %}" class="btn btn-success">+ Add Homework</a>
+        {% endif %}
+    </div>
+
+    {% if homeworks %}
+        <div class="row g-4">
+            {% for homework in homeworks %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ homework.title }}</h5>
+                            <p class="card-text text-muted mb-2">
+                                {{ homework.course.title }}<br>
+                                Due: {{ homework.submission_date|date:"d M Y, H:i" }}
+                            </p>
+                            <p class="card-text mb-3">{{ homework.description|truncatewords:20 }}</p>
+
+                            <div class="mt-auto d-flex gap-2">
+                                {% if user.student_profile %}
+                                    <a class="btn btn-outline-primary" href="{% url 'homework_details' homework.pk %}" >Details</a>
+                                    {% if homework.id in submitted_ids %}
+                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-warning flex-grow-1">
+                                            See Submission
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-success flex-grow-1">
+                                            Submit
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if user.teacher_profile and homework.course.teacher == user.teacher_profile or request.user.is_superuser%}
+                                    <a href="{% url 'update_homework' homework.id %}" class="btn btn-outline-primary btn-sm flex-grow-1">Edit</a>
+                                    <a href="{% url 'delete_homework' homework.id %}" class="btn btn-outline-danger btn-sm flex-grow-1">Delete</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-muted mt-5">No homeworks available.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

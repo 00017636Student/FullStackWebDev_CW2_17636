@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Teacher{% endblock %}
+{% block content %}
+    <h1 class="h3 mb-3">Add New Teacher</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% include 'partials/_form_fields.html' with form=form %}
+                <div class="d-flex gap-2">
+                    <button class="btn btn-success" type="submit">Save</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'teachers' %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

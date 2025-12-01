@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Delete Homework{% endblock %}
+{% block content %}
+    <h1 class="h4 mb-3">Delete Homework</h1>
+    <div class="alert alert-warning">
+        Are you sure you want to delete <strong>{{ homework.title }}</strong>? This action cannot be undone.
+    </div>
+    <form method="post" class="d-inline">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Yes, I am sure</button>
+    </form>
+    <a class="btn btn-outline-secondary ms-2" href="{% url 'homeworks' %}">Cancel</a>
+{% endblock %}

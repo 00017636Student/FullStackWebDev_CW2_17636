@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Submitted Homework Details{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Submitted Homework Details</h1>
+    <a href="{% url 'submitted_homeworks' %}" class="btn btn-outline-secondary">← Back</a>
+</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Homework</dt>
+            <dd class="col-sm-9">{{ submission.homework.title }}</dd>
+
+            <dt class="col-sm-3">Teacher</dt>
+            <dd class="col-sm-9">{{ submission.homework.course.teacher.name }}</dd>
+
+            <dt class="col-sm-3">Student</dt>
+            <dd class="col-sm-9">{{ submission.student.name }}</dd>
+
+            <dt class="col-sm-3">Submitted at</dt>
+            <dd class="col-sm-9">{{ submission.submitted_at|date:"Y-m-d H:i" }}</dd>
+
+            <dt class="col-sm-3">Grade</dt>
+            <dd class="col-sm-9">
+                {% if submission.grade == 'pass' %}
+                    <span class="badge bg-success">✅ PASS</span>
+                {% elif submission.grade == 'fail' %}
+                    <span class="badge bg-danger">❌ FAIL</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">⏳ Not Graded Yet</span>
+                {% endif %}
+            </dd>
+
+            <dt class="col-sm-3">Feedback</dt>
+            <dd class="col-sm-9">
+                {% if submission.feedback%}
+                    <span class="col-sm-9">{{submission.feedback}}</span>
+                {%else%}
+                    <span class="col-sm=9">No feedback was provided</span>
+                {%endif%}
+            </dd>
+        </dl>
+    </div>
+</div>
+{% endblock %}

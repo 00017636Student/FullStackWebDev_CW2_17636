@@ -19,11 +19,21 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+from django.conf import settings
+BASE_DIR = settings.BASE_DIR
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('study_managing.urls')),          
     path('accounts/', include('accounts.urls'))     
 ]
 
-if settings.DEBUG:
+if settings.DEBUG:  # for local development
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # For render
+    from whitenoise import WhiteNoise
+    from django.core.wsgi import get_wsgi_application
+
+    application = get_wsgi_application()
+    application = WhiteNoise(application, root=str(BASE_DIR / "media"), prefix="media/")

@@ -28,12 +28,3 @@ urlpatterns = [
     path('accounts/', include('accounts.urls'))     
 ]
 
-if settings.DEBUG:  # for local development
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    # For render
-    from whitenoise import WhiteNoise
-    from django.core.wsgi import get_wsgi_application
-
-    application = get_wsgi_application()
-    application = WhiteNoise(application, root=str(BASE_DIR / "media"), prefix="media/")

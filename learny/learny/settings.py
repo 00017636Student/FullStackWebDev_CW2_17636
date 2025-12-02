@@ -82,7 +82,7 @@ import os
 
 DATABASES = {
     'default': dj_database_url.parse(
-    os.getenv("DATABASE_URL", "postgresql://postgres:REIziXZcGdojEVBpVMyrgHBfpiLXuvPi@mainline.proxy.rlwy.net:20798/railway"),
+    os.getenv("DATABASE_URL"),
     conn_max_age=600,
     ssl_require=True,
 
@@ -138,7 +138,3 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / 'media'
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"

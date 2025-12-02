@@ -14,6 +14,9 @@
             <dt class="col-sm-3">Teacher</dt>
             <dd class="col-sm-9">{{ submission.homework.course.teacher.name }}</dd>
 
+            <dt class="col-sm-3">Student's answer</dt>
+            <dd class="col-sm-9">{{ submission.submitted_text|linebreaks }}</dd>
+
             <dt class="col-sm-3">Student</dt>
             <dd class="col-sm-9">{{ submission.student.name }}</dd>
 

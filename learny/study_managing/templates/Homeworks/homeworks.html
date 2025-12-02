@@ -26,13 +26,12 @@
 
                             <div class="mt-auto d-flex gap-2">
                                 {% if user.student_profile %}
-                                    <a class="btn btn-outline-primary" href="{% url 'homework_details' homework.pk %}" >Details</a>
                                     {% if homework.id in submitted_ids %}
-                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-warning flex-grow-1">
+                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-warning btn-sm">
                                             See Submission
                                         </a>
                                     {% else %}
-                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-success flex-grow-1">
+                                        <a href="{% url 'submit_homework' homework.id %}" class="btn btn-success btn-sm">
                                             Submit
                                         </a>
                                     {% endif %}

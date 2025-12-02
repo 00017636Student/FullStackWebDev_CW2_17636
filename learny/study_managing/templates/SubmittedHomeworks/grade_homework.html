@@ -11,9 +11,11 @@
 
             <p><strong>Student:</strong> {{ submission.student.name }}</p>
             <p><strong>Submitted at:</strong> {{ submission.submitted_at|date:"d M Y, H:i" }}</p>
-            <p><strong>File:</strong> 
-                <a href="{{ submission.submitted_file.url }}" target="_blank">Download</a>
-            </p>
+            <p><strong>Submitted Text:</strong></p>
+            <div class="border p-3 rounded mb-3">
+                {{ submission.submitted_text|linebreaks }}
+            </div>
+
 
             <form method="post">
                 {% csrf_token %}

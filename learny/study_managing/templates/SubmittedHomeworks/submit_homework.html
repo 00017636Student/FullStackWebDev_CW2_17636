@@ -6,18 +6,23 @@
 
     <h2 class="h3 mb-4">Submit Homework: {{ homework.title }}</h2>
     <p>Deadline: {{ homework.submission_date|date:"d M Y" }}</p>
+    <div class="card mb-3 p-3 bg-light">
+        <strong>Homework Description:</strong>
+        <p>{{ homework.description|truncatechars:200 }}</p>
+        <a href="{% url 'homework_details' homework.id %}">See details</a>
+    </div>
 
     {% if deadline_passed %}
         <div class="alert alert-danger" role="alert">
             🚨 **The deadline for this homework has passed. Submissions are now closed.**
         </div>
         <a href="{% url 'homeworks' %}" class="btn btn-secondary ms-2">Back</a>
+
         {% if submission %}
-              <h3>Your Submission Details:</h3>
-              <p>Submitted On: {{ submission.submitted_at|date:"d M Y" }}</p>
-              <p>Submitted File: <a href="{{ submission.submitted_file.url }}" target="_blank">View File</a></p>
+            <h3>Your Submission:</h3>
+            <div class="border p-3 rounded bg-light">{{ submission.submitted_text|linebreaks }}</div>
         {% else %}
-              <p>You did not submit this homework before the deadline.</p>
+            <p>You did not submit this homework before the deadline.</p>
         {% endif %}
 
     {% else %}
@@ -27,16 +32,11 @@
 
             {% if submission %}
                 <div class="alert alert-info mb-3">
-                    <strong>You have already submitted this homework.</strong><br>
-                    <a href="{{ submission.submitted_file.url }}" target="_blank">
-                        View submitted file
-                    </a>
-                </div>
-
-                <a href="{% url 'submitted_homeworks' %}" class="btn btn-primary me-2">
-                    See My Submissions
-                </a>
-                <a href="{% url 'homeworks' %}" class="btn btn-secondary">Back</a>
+                    <strong>You have already submitted this homework.</strong>
+                    <div class="border p-3 rounded bg-light mt-2">{{ submission.submitted_text|linebreaks }}</div>
+            </div>
+            <a href="{% url 'submitted_homeworks' %}" class="btn btn-primary me-2">See My Submissions</a>
+            <a href="{% url 'homeworks' %}" class="btn btn-secondary">Back</a>
 
             {% else %}
 
@@ -44,10 +44,10 @@
                     {% csrf_token %}
 
                     <div class="mb-3">
-                        {{ form.submitted_file }}
-                        <div class="form-text">Choose your homework file to submit.</div>
+                        {{ form.submitted_text.label_tag }}
+                        {{ form.submitted_text }}
+                        <div class="form-text">Enter your homework answer here.</div>
                     </div>
-
                     <button type="submit" class="btn btn-success">Submit</button>
                     <a href="{% url 'homeworks' %}" class="btn btn-secondary ms-2">Back</a>
                 </form>

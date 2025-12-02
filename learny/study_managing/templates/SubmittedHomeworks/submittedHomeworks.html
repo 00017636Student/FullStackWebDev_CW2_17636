@@ -18,7 +18,7 @@
                             <th>Course</th>
                             <th>Homework</th>
                             <th>Student</th>
-                            <th>File</th>
+                            <th>Answer</th>
                             <th>Date</th>
                             <th>Grade</th>
                             <th>Feedback</th>
@@ -33,11 +33,7 @@
                             <td class="fw-semibold">{{ s.homework.title }}</td>
                             <td>{{ s.student.name }}</td>
 
-                            <td>
-                                <a href="{{ s.submitted_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                    📄 Download
-                                </a>
-                            </td>
+                            <td> {{ s.submitted_text|truncatechars:30 }} </td>
 
                             <td class="text-muted">{{ s.submitted_at|date:"d M Y, H:i" }}</td>
 

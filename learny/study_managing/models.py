@@ -64,7 +64,7 @@ class SubmittedHomework(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     homework = models.ForeignKey(Homework, on_delete=models.CASCADE)
     submitted_at = models.DateTimeField(auto_now_add=True)
-    submitted_file = models.FileField(upload_to= 'homeworks/')
+    submitted_text = models.TextField()
     feedback = models.TextField(blank=True, null=True)
     grade = models.CharField(max_length=10, choices = grade_choices, blank=True, null=True)
     def __str__(self):

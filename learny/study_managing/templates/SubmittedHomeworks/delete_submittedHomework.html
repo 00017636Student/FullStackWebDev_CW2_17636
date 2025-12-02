@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="h4 mb-3">Delete Submitted Homework</h1>
     <div class="alert alert-warning">
-        Are you sure you want to delete <strong>{{ submission.submitted_file }}</strong>? This action cannot be undone.
+        Are you sure you want to delete the submission for <strong>{{ submission.homework.title }}</strong>? This action cannot be undone.
     </div>
     <form method="post" class="d-inline">
         {% csrf_token %}

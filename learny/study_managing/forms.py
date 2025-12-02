@@ -54,10 +54,13 @@ class HomeworkForm(BaseStyledModelForm):
          })
         }
 
-class SubmittedHomeworkStudentForm(BaseStyledModelForm): #This form will be used by student to send his hw
+class SubmittedHomeworkStudentForm(BaseStyledModelForm): #This form will be used by students to send their hw
     class Meta:
         model = SubmittedHomework
-        fields = ['submitted_file']
+        fields = ['submitted_text']
+        widgets = {
+            'submitted_text': forms.Textarea
+        }
 
 class SubmittedHomeworkTeacherForm(BaseStyledModelForm): #This form will be used by teacher to put grade and feedback
     class Meta:

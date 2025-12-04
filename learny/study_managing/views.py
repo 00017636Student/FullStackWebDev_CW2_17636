@@ -2,13 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import TeacherForm, StudentForm, CourseForm, AttendanceForm, HomeworkForm, EnrollmentForm, SubmittedHomeworkStudentForm, SubmittedHomeworkTeacherForm 
 from django.contrib import messages
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils import timezone
-from datetime import UTC
 
 # Create your views here.
 def custom_permission_denied_view(request, exception=None): #Function for custom 403 page
@@ -148,17 +147,17 @@ def attendances_list(request):
 
     if user.is_superuser:
         attendances = Attendance.objects.all().order_by(
+            "-date",
             "enrollment__course__title",
             "enrollment__student__name",
-            "-date"
         )
 
     elif hasattr(user, 'teacher_profile'):
         teacher_profile = user.teacher_profile
         attendances = Attendance.objects.filter(enrollment__course__teacher = teacher_profile).order_by(
+            "-date",
             "enrollment__course__title",
-            "enrollment__student__name",
-            "-date"
+            "enrollment__student__name"
         )
 
     elif hasattr(user, 'student_profile'):
@@ -388,13 +387,13 @@ class HomeworkUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
 
 class HomeworkDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Homework
-    form_class = HomeworkForm
     template_name = 'Homeworks/delete_homework.html'
     success_url = reverse_lazy('homeworks')
     permission_required = ('study_managing.delete_homework')
-    def form_valid(self, form):
+    context_object_name = 'homework'
+    def delete(self, request, *args, **kwargs):
         messages.warning(self.request, "Homework was deleted")
-        return super().form_valid(form)
+        return super().delete(request, *args, **kwargs)
     
 #Views for submitted homework, submit= create submitted homework
 @login_required
@@ -404,15 +403,14 @@ def submit_homework(request, homework_id):
     submission = SubmittedHomework.objects.filter(homework=homework, student=student).first()
 
     now = timezone.now()
-    aware_deadline = homework.submission_date.astimezone(UTC)
-    deadline_passed = now.astimezone(UTC) > aware_deadline
+    deadline_passed = now > homework.submission_date
 
     if request.method == 'POST':
         if deadline_passed:
             messages.error(request, "Submission failed: The deadline for this homework has passed.")
             return redirect('homeworks') 
         
-        form = SubmittedHomeworkStudentForm(request.POST, request.FILES, instance=submission)
+        form = SubmittedHomeworkStudentForm(request.POST)
         if form.is_valid():
             submitted = form.save(commit=False)
             submitted.student = student
@@ -421,8 +419,8 @@ def submit_homework(request, homework_id):
             messages.success(request, "Homework was successfully submitted!")
             return redirect('homeworks')
     
-    else: #
-        form = SubmittedHomeworkStudentForm(instance=submission)
+    else: 
+        form = SubmittedHomeworkStudentForm()
 
     return render(request, 'SubmittedHomeworks/submit_homework.html', {
         'form': form,

@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Student, Teacher, Course, Enrollment, Homework, SubmittedHomework, Attendance
 from .serializers import (StudentSerializer, TeacherSerializer, CourseSerializer, EnrollmentSerializer, HomeworkSerializer, SubmittedHomeworkSerializer, AttendanceSerializer) 
-from datetime import datetime
+from django.utils import timezone
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -42,7 +42,7 @@ class SubmittedHomeworkViewSet(viewsets.ModelViewSet):
         homework_id = request.data.get("homework")
         homework = Homework.objects.get(id=homework_id)
 
-        if homework.submission_date and datetime.now() > homework.submission_date:
+        if homework.submission_date and timezone.now() > homework.submission_date:
             return Response(
                 {"detail": "Deadline has passed — submission not allowed"},
                 status=status.HTTP_400_BAD_REQUEST
